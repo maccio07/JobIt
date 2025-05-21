@@ -31,16 +31,24 @@ class AuthService {
   }
 
   async login(credentials: LoginCredentials): Promise<User> {
-    const validationErrors = validateLoginCredentials(credentials);
-    if (validationErrors.length > 0) {
-      throw new Error(validationErrors.join(', '));
+    // Validate email format first
+    if (!credentials.email) {
+      throw new Error('Invalid email or password');
     }
 
+    // Find user by email
     const user = Array.from(this.users.values()).find(
       u => u.email === credentials.email
     );
 
-    if (!user || !this.comparePasswords(credentials.password, user.password)) {
+    // Check if user exists
+    if (!user) {
+      throw new Error('Invalid email or password');
+    }
+
+    // Check if password is valid
+    const isPasswordValid = this.comparePasswords(credentials.password, user.password);
+    if (!isPasswordValid) {
       throw new Error('Invalid email or password');
     }
 
