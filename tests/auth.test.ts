@@ -38,6 +38,7 @@ describe('Authentication Service', () => {
   });
 
   it('should reject login with invalid email', async () => {
+    await authService.register(validUser);
     await expect(
       authService.login({ email: 'wrong@example.com', password: 'StrongPass123' })
     ).rejects.toThrow('Invalid email or password');
