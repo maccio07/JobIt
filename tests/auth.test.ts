@@ -1,8 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import { authService } from '../services/auth-service';
 import { RegisterCredentials, LoginCredentials } from '../types/auth';
 
 describe('Authentication Service', () => {
+  // Reset state before each test
+  beforeEach(() => {
+    // @ts-ignore
+    authService.users = new Map();
+  });
+
   const validUser: RegisterCredentials = {
     email: 'test@example.com',
     password: 'StrongPass123',
